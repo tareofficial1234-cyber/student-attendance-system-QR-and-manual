@@ -47,13 +47,17 @@ CREATE TABLE IF NOT EXISTS attendance (
 
 // Migrate older databases created before manual attendance was added.
 const attendanceColumns = db.prepare("PRAGMA table_info(attendance)").all();
-if (!attendanceColumns.some(c => c.name === "method")) {
-  db.exec("ALTER TABLE attendance ADD COLUMN method TEXT NOT NULL DEFAULT 'QR'");
+if (!attendanceColumns.some((c) => c.name === "method")) {
+  db.exec(
+    "ALTER TABLE attendance ADD COLUMN method TEXT NOT NULL DEFAULT 'QR'",
+  );
 }
 
 const user = db.prepare("SELECT id FROM users WHERE username='admin'").get();
 if (!user) {
-  db.prepare("INSERT INTO users(username,password,role) VALUES('admin','admin123','admin')").run();
+  db.prepare(
+    "INSERT INTO users(username,password,role) VALUES('admin','TareAttendance#2026!','admin')",
+  ).run();
 }
 
 if (db.prepare("SELECT COUNT(*) c FROM courses").get().c === 0) {
