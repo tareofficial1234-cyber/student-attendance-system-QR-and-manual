@@ -1,136 +1,196 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Attendance Management System</title>
-<link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-<div id="loginView" class="center">
-  <div class="card login">
-    <h1>Student Attendance</h1>
-    <p>Teacher / Admin Login</p>
-    <form id="loginForm">
-      <input id="username" placeholder="Username" value="admin" required>
-      <input id="password" type="password" placeholder="Password" value="admin123" required>
-      <button>Login</button>
-    </form>
-    <small>Demo login: admin / admin123</small>
-  </div>
-</div>
-
-<div id="app" class="hidden">
-  <aside>
-    <h2>Attendance</h2>
-    <button class="nav active" data-page="dashboard">Dashboard</button>
-    <button class="nav" data-page="students">Students</button>
-    <button class="nav" data-page="scanner">QR Scanner</button>
-    <button class="nav" data-page="manual">Manual Attendance</button>
-    <button class="nav" data-page="reports">Reports</button>
-    <button id="logout" class="logout">Logout</button>
-  </aside>
-
-  <main>
-    <header><h1 id="pageTitle">Dashboard</h1></header>
-
-    <section id="dashboard" class="page">
-      <div class="stats">
-        <div class="stat"><span>Total Students</span><b id="totalStudents">0</b></div>
-        <div class="stat"><span>Present Today</span><b id="presentToday">0</b></div>
-        <div class="stat"><span>Total Attendance</span><b id="totalAttendance">0</b></div>
-        <div class="stat"><span>Courses</span><b id="courseCount">0</b></div>
-      </div>
-      <div class="card">
-        <h2>How to use</h2>
-        <ol>
-          <li>Add students from the Students page.</li>
-          <li>Generate a QR code for each student.</li>
-          <li>Open QR Scanner and select a course to scan students.</li>
-          <li>Or open Manual Attendance and tick the students who are present.</li>
-          <li>View or export records from Reports; the method shows QR or Manual.</li>
-        </ol>
-      </div>
-    </section>
-
-    <section id="students" class="page hidden">
-      <div class="card">
-        <h2>Add / Edit Student</h2>
-        <form id="studentForm" class="grid-form">
-          <input type="hidden" id="editId">
-          <input id="studentId" placeholder="Student ID *" required>
-          <input id="studentName" placeholder="Full name *" required>
-          <input id="studentEmail" placeholder="Email">
-          <input id="studentPhone" placeholder="Phone">
-          <input id="className" placeholder="Class / Section">
-          <button>Save Student</button>
-          <button type="button" id="cancelEdit" class="secondary">Cancel</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Attendance Management System</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div id="loginView" class="center">
+      <div class="card login">
+        <h1>Student Attendance</h1>
+        <p>Teacher / Admin Login</p>
+        <form id="loginForm">
+          <input id="username" placeholder="Username" value="admin" required />
+          <input
+            id="password"
+            type="password"
+            placeholder="Password"
+            value="password: 'TareAttendance2026!'"
+            required
+          />
+          <button>Login</button>
         </form>
+        <small>Demo login: admin / admin123</small>
       </div>
-      <div class="card">
-        <div class="toolbar"><input id="studentSearch" placeholder="Search students..."></div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Email</th><th>Actions</th></tr></thead>
-          <tbody id="studentsTable"></tbody>
-        </table></div>
-      </div>
-    </section>
+    </div>
 
-    <section id="scanner" class="page hidden">
-      <div class="card">
-        <h2>QR Attendance Scanner</h2>
-        <select id="courseSelect"></select>
-        <div id="reader"></div>
-        <div id="scanResult" class="result"></div>
-        <p class="hint">Allow camera permission when your browser asks. HTTPS or localhost is recommended for camera access.</p>
-      </div>
-    </section>
+    <div id="app" class="hidden">
+      <aside>
+        <h2>Attendance</h2>
+        <button class="nav active" data-page="dashboard">Dashboard</button>
+        <button class="nav" data-page="students">Students</button>
+        <button class="nav" data-page="scanner">QR Scanner</button>
+        <button class="nav" data-page="manual">Manual Attendance</button>
+        <button class="nav" data-page="reports">Reports</button>
+        <button id="logout" class="logout">Logout</button>
+      </aside>
 
+      <main>
+        <header><h1 id="pageTitle">Dashboard</h1></header>
 
-    <section id="manual" class="page hidden">
-      <div class="card">
-        <h2>Manual / Tick Attendance</h2>
-        <div class="toolbar">
-          <select id="manualCourseSelect"></select>
-          <input type="date" id="manualDate">
-          <button id="loadManualStudents">Load Students</button>
-          <button type="button" id="selectAllPresent" class="secondary">Select All Present</button>
-          <button type="button" id="clearAllPresent" class="secondary">Clear All</button>
-        </div>
-        <p class="hint">Tick the students who are present, then click Save Attendance. Unchecked students are recorded as Absent.</p>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>Present</th><th>Student ID</th><th>Name</th><th>Class</th></tr>
-            </thead>
-            <tbody id="manualStudentsTable"></tbody>
-          </table>
-        </div>
-        <div class="manual-save-row">
-          <span id="manualCount">0 present</span>
-          <button id="saveManualAttendance">Save Attendance</button>
-        </div>
-        <div id="manualResult" class="result"></div>
-      </div>
-    </section>
+        <section id="dashboard" class="page">
+          <div class="stats">
+            <div class="stat">
+              <span>Total Students</span><b id="totalStudents">0</b>
+            </div>
+            <div class="stat">
+              <span>Present Today</span><b id="presentToday">0</b>
+            </div>
+            <div class="stat">
+              <span>Total Attendance</span><b id="totalAttendance">0</b>
+            </div>
+            <div class="stat">
+              <span>Courses</span><b id="courseCount">0</b>
+            </div>
+          </div>
+          <div class="card">
+            <h2>How to use</h2>
+            <ol>
+              <li>Add students from the Students page.</li>
+              <li>Generate a QR code for each student.</li>
+              <li>Open QR Scanner and select a course to scan students.</li>
+              <li>
+                Or open Manual Attendance and tick the students who are present.
+              </li>
+              <li>
+                View or export records from Reports; the method shows QR or
+                Manual.
+              </li>
+            </ol>
+          </div>
+        </section>
 
-    <section id="reports" class="page hidden">
-      <div class="card">
-        <div class="toolbar">
-          <input type="date" id="reportDate">
-          <button id="loadReports">Filter</button>
-          <button id="exportCsv" class="secondary">Export CSV</button>
-        </div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Student ID</th><th>Name</th><th>Class</th><th>Course</th><th>Date</th><th>Time</th><th>Status</th><th>Method</th></tr></thead>
-          <tbody id="reportsTable"></tbody>
-        </table></div>
-      </div>
-    </section>
-  </main>
-</div>
+        <section id="students" class="page hidden">
+          <div class="card">
+            <h2>Add / Edit Student</h2>
+            <form id="studentForm" class="grid-form">
+              <input type="hidden" id="editId" />
+              <input id="studentId" placeholder="Student ID *" required />
+              <input id="studentName" placeholder="Full name *" required />
+              <input id="studentEmail" placeholder="Email" />
+              <input id="studentPhone" placeholder="Phone" />
+              <input id="className" placeholder="Class / Section" />
+              <button>Save Student</button>
+              <button type="button" id="cancelEdit" class="secondary">
+                Cancel
+              </button>
+            </form>
+          </div>
+          <div class="card">
+            <div class="toolbar">
+              <input id="studentSearch" placeholder="Search students..." />
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="studentsTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
 
-<script src="https://unpkg.com/html5-qrcode" defer></script>
-<script src="/js/app.js" defer></script>
-</body>
+        <section id="scanner" class="page hidden">
+          <div class="card">
+            <h2>QR Attendance Scanner</h2>
+            <select id="courseSelect"></select>
+            <div id="reader"></div>
+            <div id="scanResult" class="result"></div>
+            <p class="hint">
+              Allow camera permission when your browser asks. HTTPS or localhost
+              is recommended for camera access.
+            </p>
+          </div>
+        </section>
+
+        <section id="manual" class="page hidden">
+          <div class="card">
+            <h2>Manual / Tick Attendance</h2>
+            <div class="toolbar">
+              <select id="manualCourseSelect"></select>
+              <input type="date" id="manualDate" />
+              <button id="loadManualStudents">Load Students</button>
+              <button type="button" id="selectAllPresent" class="secondary">
+                Select All Present
+              </button>
+              <button type="button" id="clearAllPresent" class="secondary">
+                Clear All
+              </button>
+            </div>
+            <p class="hint">
+              Tick the students who are present, then click Save Attendance.
+              Unchecked students are recorded as Absent.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Present</th>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Class</th>
+                  </tr>
+                </thead>
+                <tbody id="manualStudentsTable"></tbody>
+              </table>
+            </div>
+            <div class="manual-save-row">
+              <span id="manualCount">0 present</span>
+              <button id="saveManualAttendance">Save Attendance</button>
+            </div>
+            <div id="manualResult" class="result"></div>
+          </div>
+        </section>
+
+        <section id="reports" class="page hidden">
+          <div class="card">
+            <div class="toolbar">
+              <input type="date" id="reportDate" />
+              <button id="loadReports">Filter</button>
+              <button id="exportCsv" class="secondary">Export CSV</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Course</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Method</th>
+                  </tr>
+                </thead>
+                <tbody id="reportsTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode" defer></script>
+    <script src="/js/app.js" defer></script>
+  </body>
 </html>
