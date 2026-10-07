@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 node_modules/
 server/database/*.db
 .env
 *.log
+=======
+node_modules/ 
+.env 
+*.db 
+*.sqlite 
+*.sqlite3 
+>>>>>>> ad92fe51612dc11db9bae6cf60f710ef9d7c7c77

@@ -4,10 +4,15 @@ const fs = require("fs");
 
 const dir = path.join(__dirname, "database");
 fs.mkdirSync(dir, { recursive: true });
+<<<<<<< HEAD
+=======
+
+>>>>>>> ad92fe51612dc11db9bae6cf60f710ef9d7c7c77
 const db = new Database(path.join(dir, "attendance.db"));
 db.pragma("foreign_keys = ON");
 
 db.exec(`
+<<<<<<< HEAD
 CREATE TABLE IF NOT EXISTS sections (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT UNIQUE NOT NULL,
@@ -24,12 +29,20 @@ CREATE TABLE IF NOT EXISTS users (
   section_id INTEGER,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(section_id) REFERENCES sections(id) ON DELETE SET NULL
+=======
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'teacher'
+>>>>>>> ad92fe51612dc11db9bae6cf60f710ef9d7c7c77
 );
 
 CREATE TABLE IF NOT EXISTS students (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   student_id TEXT UNIQUE NOT NULL,
   name TEXT NOT NULL,
+<<<<<<< HEAD
   school_name TEXT DEFAULT '',
   email TEXT DEFAULT '',
   phone TEXT DEFAULT '',
@@ -39,13 +52,23 @@ CREATE TABLE IF NOT EXISTS students (
   active INTEGER NOT NULL DEFAULT 1,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(section_id) REFERENCES sections(id) ON DELETE SET NULL
+=======
+  email TEXT DEFAULT '',
+  phone TEXT DEFAULT '',
+  class_name TEXT DEFAULT '',
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+>>>>>>> ad92fe51612dc11db9bae6cf60f710ef9d7c7c77
 );
 
 CREATE TABLE IF NOT EXISTS courses (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
+<<<<<<< HEAD
   name TEXT UNIQUE NOT NULL,
   section_id INTEGER,
   FOREIGN KEY(section_id) REFERENCES sections(id) ON DELETE SET NULL
+=======
+  name TEXT UNIQUE NOT NULL
+>>>>>>> ad92fe51612dc11db9bae6cf60f710ef9d7c7c77
 );
 
 CREATE TABLE IF NOT EXISTS attendance (
@@ -56,6 +79,7 @@ CREATE TABLE IF NOT EXISTS attendance (
   time TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'Present',
   method TEXT NOT NULL DEFAULT 'QR',
+<<<<<<< HEAD
   recorded_by INTEGER,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(student_id) REFERENCES students(id) ON DELETE CASCADE,
@@ -125,6 +149,31 @@ for (const s of db.prepare("SELECT id FROM students WHERE qr_token IS NULL OR qr
 
 if (db.prepare("SELECT COUNT(*) c FROM courses").get().c === 0) {
   db.prepare("INSERT INTO courses(name,section_id) VALUES (?,?)").run("General Class", general ? general.id : null);
+=======
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(student_id) REFERENCES students(id) ON DELETE CASCADE,
+  FOREIGN KEY(course_id) REFERENCES courses(id) ON DELETE SET NULL
+);
+`);
+
+// Migrate older databases created before manual attendance was added.
+const attendanceColumns = db.prepare("PRAGMA table_info(attendance)").all();
+if (!attendanceColumns.some((c) => c.name === "method")) {
+  db.exec(
+    "ALTER TABLE attendance ADD COLUMN method TEXT NOT NULL DEFAULT 'QR'",
+  );
+}
+
+const user = db.prepare("SELECT id FROM users WHERE username='admin'").get();
+if (!user) {
+  db.prepare(
+    "INSERT INTO users(username,password,role) VALUES('admin','TareAttendance#2026!','admin')",
+  ).run();
+}
+
+if (db.prepare("SELECT COUNT(*) c FROM courses").get().c === 0) {
+  db.prepare("INSERT INTO courses(name) VALUES (?)").run("General Class");
+>>>>>>> ad92fe51612dc11db9bae6cf60f710ef9d7c7c77
 }
 
 module.exports = db;

@@ -1,14 +1,27 @@
 {
+<<<<<<< HEAD
   "name": "project-mercy-student-attendance",
   "version": "2.1.0",
   "description": "Project Mercy Student Attendance Management System with SQLite database, QR/manual attendance, admin-only student registration and section teacher access",
   "main": "server/server.js",
+=======
+  "name": "student-attendance-system",
+  "version": "1.0.0",
+  "description": "Student Attendance Management System with QR code",
+  "main": "server/server.js",
+  "engines": {
+    "node": "22.x"
+  },
+>>>>>>> ad92fe51612dc11db9bae6cf60f710ef9d7c7c77
   "scripts": {
     "start": "node server/server.js",
     "dev": "node --watch server/server.js"
   },
   "dependencies": {
+<<<<<<< HEAD
     "bcryptjs": "^2.4.3",
+=======
+>>>>>>> ad92fe51612dc11db9bae6cf60f710ef9d7c7c77
     "better-sqlite3": "^11.10.0",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
