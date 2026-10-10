@@ -1,0 +1,17 @@
+{
+  "name": "project-mercy-student-attendance",
+  "version": "2.0.0",
+  "description": "Project Mercy Student Attendance Management System with QR, manual attendance, section accounts and admin control",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.10.0",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "qrcode": "^1.5.4"
+  }
+}
