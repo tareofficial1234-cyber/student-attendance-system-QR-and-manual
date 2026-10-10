@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Project Mercy — Student Attendance</title><link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="loginView" class="center">
+  <div class="login-shell">
+    <div class="brand"><img src="/well.svg" alt="Project Mercy wellness image"><div><b>PMM+</b><span>PROJECT MERCY</span></div></div>
+    <div class="card login"><h1>Student Attendance</h1><p>QR + Manual Attendance</p>
+      <form id="loginForm"><input id="email" type="email" placeholder="Section email" required><input id="password" type="password" placeholder="Password" required><button>Sign in</button></form>
+      <small>Admin demo: admin@pmm.local / admin123</small>
+    </div>
+  </div>
+</div>
+<div id="app" class="hidden">
+<aside>
+ <div class="brand side"><img src="/well.svg" alt=""><div><b>PMM+</b><span>PROJECT MERCY</span></div></div>
+ <div id="userBadge" class="user-badge"></div>
+ <button class="nav active" data-page="dashboard">Dashboard</button>
+ <button class="nav" data-page="students">Students</button>
+ <button class="nav" data-page="scanner">QR Scanner</button>
+ <button class="nav" data-page="manual">Manual Attendance</button>
+ <button class="nav" data-page="reports">Reports</button>
+ <button class="nav admin-only" data-page="sections">Sections & Accounts</button>
+ <button class="nav admin-only" data-page="courses">Courses</button>
+ <button id="logout" class="logout">Logout</button>
+</aside>
+<main><header><h1 id="pageTitle">Dashboard</h1><div class="tag">Better Care • Healthier Community</div></header>
+
+<section id="dashboard" class="page"><div class="hero card"><div><h2>Welcome to Project Mercy</h2><p>Manage students by section and record attendance by QR code or manual check-in.</p></div><img src="/well.svg" alt="Wellness"></div>
+<div class="stats"><div class="stat"><span>Total Students</span><b id="totalStudents">0</b></div><div class="stat"><span>Present Today</span><b id="presentToday">0</b></div><div class="stat"><span>Total Attendance</span><b id="totalAttendance">0</b></div><div class="stat"><span>Sections</span><b id="sectionCount">0</b></div></div>
+<div class="card"><h2>How it works</h2><ol><li>Admin creates sections and gives each section its own email/password.</li><li>Add each student to the correct section; the system creates a unique PMM student ID and QR code.</li><li>Use QR Scanner or Manual Attendance to record attendance.</li><li>Each section account can see only its own students and attendance.</li><li>Admin can see all sections, students, attendance and reports.</li></ol></div></section>
+
+<section id="students" class="page hidden"><div class="card"><h2>Add / Edit Student</h2><form id="studentForm" class="grid-form"><input type="hidden" id="editId"><input id="studentId" placeholder="Student ID (auto if blank)"><input id="studentName" placeholder="Full name *" required><input id="schoolName" placeholder="School name"><input id="studentEmail" type="email" placeholder="Student email"><input id="studentPhone" placeholder="Phone number"><input id="className" placeholder="Class / Grade"><select id="studentSection" class="admin-only"></select><button>Save Student</button><button type="button" id="cancelEdit" class="secondary">Cancel</button></form><p class="hint">Leave Student ID empty to automatically create a unique ID such as PMM-2026-00001. The QR code is generated from that student record.</p></div>
+<div class="card"><div class="toolbar"><input id="studentSearch" placeholder="Search name, ID, school, phone..."></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>School</th><th>Section</th><th>Class</th><th>Contact</th><th>QR</th><th>Edit</th></tr></thead><tbody id="studentsTable"></tbody></table></div></div></section>
+
+<section id="scanner" class="page hidden"><div class="card"><h2>QR Attendance Scanner</h2><select id="courseSelect"></select><div id="reader"></div><div id="scanResult" class="result"></div><p class="hint">Allow camera permission. HTTPS or localhost is recommended for camera access.</p></div></section>
+
+<section id="manual" class="page hidden"><div class="card"><h2>Manual / Tick Attendance</h2><div class="toolbar"><select id="manualCourseSelect"></select><input type="date" id="manualDate"><button id="loadManualStudents">Load Students</button><button type="button" id="selectAllPresent" class="secondary">All Present</button><button type="button" id="clearAllPresent" class="secondary">Clear</button></div><p class="hint">Tick present students. Everyone unchecked will be recorded as Absent.</p><div class="table-wrap"><table><thead><tr><th>Present</th><th>ID</th><th>Name</th><th>School</th><th>Class</th></tr></thead><tbody id="manualStudentsTable"></tbody></table></div><div class="manual-save-row"><span id="manualCount">0 present</span><button id="saveManualAttendance">Save Attendance</button></div><div id="manualResult" class="result"></div></div></section>
+
+<section id="reports" class="page hidden"><div class="card"><div class="toolbar"><input type="date" id="reportDate"><button id="loadReports">Filter</button><button id="exportCsv" class="secondary">Export CSV</button></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>School</th><th>Section</th><th>Course</th><th>Date</th><th>Time</th><th>Status</th><th>Method</th></tr></thead><tbody id="reportsTable"></tbody></table></div></div></section>
+
+<section id="sections" class="page hidden"><div class="card"><h2>Create Section</h2><form id="sectionForm" class="grid-form"><input id="sectionName" placeholder="Section name *" required><input id="sectionDescription" placeholder="Description"><button>Create Section</button></form></div><div class="card"><h2>Assign Section Email & Password</h2><form id="userForm" class="grid-form"><input id="sectionEmail" type="email" placeholder="Section email *" required><input id="sectionPassword" type="password" placeholder="Password (6+ characters)" required><select id="accountSection" required></select><button>Create Section Account</button></form></div><div class="card"><h2>Sections</h2><div id="sectionsList"></div></div><div class="card"><h2>Section Accounts</h2><div class="table-wrap"><table><thead><tr><th>Email</th><th>Section</th><th>Role</th><th>Action</th></tr></thead><tbody id="usersTable"></tbody></table></div></div></section>
+
+<section id="courses" class="page hidden"><div class="card"><h2>Create Course / Class</h2><form id="courseForm" class="grid-form"><input id="courseName" placeholder="Course name *" required><select id="courseSection"></select><button>Create Course</button></form></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Course</th><th>Section</th></tr></thead><tbody id="coursesTable"></tbody></table></div></div></section>
+</main></div>
+<script src="https://unpkg.com/html5-qrcode" defer></script><script src="/js/app.js" defer></script>
+</body></html>
